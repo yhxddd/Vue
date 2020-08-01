@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>第三方类实现动画</title>
+    <script src="vue.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+    <style>
+
+    </style>
+</head>
+<body>
+<div id="app">
+    <!-- :duration 指定入场和离场时间均为200ms-->
+    <input type="button" value="toggle" @click="flag=!flag">
+    <transition enter-active-class="animated bounceIn" enter-leave-class="animated bounceOut" :duration="200">
+        <h3 v-if="flag">change</h3>
+    </transition>
+    <hr/>
+<!-- 传入对象分别设置-->
+    <input type="button" value="toggle2" @click="flag2=!flag2">
+    <transition enter-active-class="bounceIn" enter-leave-class="bounceOut"
+                :duration="{enter:200,leave:400}">
+        <h3 v-if="flag2" class="animated">change</h3>
+    </transition>
+
+</div>
+
+<script>
+    var vm=new Vue({
+        el:'#app',
+        data:{
+            flag:false,
+            flag2:false
+        },
+        methods:{}
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>组件中的data</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <mycom1></mycom1>
+    <counter></counter>
+</div>
+
+<template id="tmp1">
+    <div>
+        <input type="button" value="+1" @click="add">
+        <h2>{{count}}</h2>
+    </div>
+</template>
+
+
+<script>
+    //组件可以又自己的data 数据， 但是这里的data需要定义为function 且返回一个对象
+    Vue.component('mycom1',{
+        template:'<h2>这是全局组件 ---- {{msg}}</h2>',
+        data: function(){
+            return {
+                msg:'这是组件中data定义的数据'
+            }
+        }
+    });
+
+    //定义一个计数器组件
+    Vue.component('counter',{
+        template: '#tmp1',
+        data:function(){
+            return{
+                //若返回一个外部对象时 调用好多次其实指向的都是同一个对象即几个东西会同步变化
+                count:0
+            }
+        },
+        methods:{
+            add(){
+                this.count ++
+            }
+        }
+    });
+
+    var vm = new Vue({
+        el:'#app',
+        data:{
+
+        },
+        methods:{}
+    })
+</script>
+</body>
+</html>

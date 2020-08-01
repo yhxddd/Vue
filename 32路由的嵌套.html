@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>路由的嵌套</title>
+    <script src="vue.js"></script>
+    <script src="vue-router.js"></script>
+</head>
+<body>
+
+<div id="app">
+    <router-link to="/account">Account</router-link>
+
+    <router-view></router-view>
+</div>
+
+<template id="tmp1">
+    <div>
+        <h1>这是Account组件</h1>
+
+        <router-link to="/account/login">登录</router-link>
+        <router-link to="/account/register">注册</router-link>
+        <router-view></router-view>
+    </div>
+</template>
+
+<script>
+    var account={
+        template:'#tmp1'
+    };
+
+    var login={
+        template:'<h3>登录</h3>'
+    };
+    var register={
+        template:'<h3>注册</h3>'
+    };
+    var router = new VueRouter({
+        //children 子路由 path地址 不带 /  否则会以根路径请求
+        routes:[
+            {
+                path:'/account',
+                component:account,
+                children:[
+                    {path:'login',component: login},
+                    {path:'register',component: register}
+                ]
+            },
+
+            //下面这样写表示 login 和account 平级
+           // {path:'/account/login',component: login},
+            //{path:'/account/register',component: register}
+        ]
+    });
+
+    var vm=new Vue({
+        el:'#app',
+        data:{},
+        methods:{},
+        router
+    })
+</script>
+
+</body>
+</html>

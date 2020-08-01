@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>品牌列表案例（过滤器、自定义指令）</title>
+    <script src="vue.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+<body>
+
+<div id="app">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">添加品牌</h3>
+        </div>
+        <div class="panel-body form-inline">
+            <lable>
+                Id:
+                <input type="text" class="form-control" v-model="id">
+            </lable>
+            <lable>
+                Name:
+                <input type="text" class="form-control" v-model="name" @keyup.enter="add">
+            </lable>
+
+            <input type="button" value="添加" class="btn btn-primary" @click="add">
+
+            <lable>
+                搜索名称关键字：
+                <!-- Vue 中所有的指令在调用的时候都以  v- 开头     v-focus 是一个自定义指令-->
+                <input type="text" class="form-control" v-model="keywords" id="search" v-focus v-color="'blue'">
+            </lable>
+        </div>
+    </div>
+
+
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Ctime</th>
+                <th>Operation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="item in search(keywords)" :key="item.id">
+                <td>{{item.id}}</td>
+                <td v-text="item.name"></td>
+                <td>{{item.ctime |dataFormat('')}}</td>
+                <td>
+                    <a href="" @click.prevent="del(item.id)" >删除</a>
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+</div>
+
+<script>
+    //全局过滤器，进行时间得格式化
+    Vue.filter('dataFormat',function(dateStr,pattern){
+        var dt=new Date(dateStr);
+        var y=dt.getFullYear();
+        var m=dt.getMonth()+1;
+        var d=dt.getDate();
+        //return y+'-'+ m +'-'+d;
+
+        if(pattern.toLowerCase()==='yyyy-mm-dd'){//将传入得参数转为小写
+            return `${y}-${m}-${d}`  //模板字符串
+        }else{
+            var hh=dt.getHours();
+            var mm=dt.getMinutes();
+            var ss=dt.getSeconds();
+            return`${y}-${m}-${d}  ${hh}:${mm}:${ss}`
+        }
+    });
+
+    //自定义全局指令 directive('指令名称',对象)
+    //定义时的指令名称前面不用加  v- 调用时必须加v-
+    //对象： 身上有一些指令相关的函数（钩子函数），再特定的阶段执行相关的操作
+
+    //钩子函数的参数（el,binding）
+    //el 是被绑定的元素名
+    //binding的属性：   name:指令名 不包括v-前缀
+    //                  value:指令的绑定值v-my-directive="1+1",value值是2
+    //                  expression：绑定值的字符串形式 v-my-directive="1+1"，expression的值为"1+1"
+
+    //自定义获取焦点的指令
+    Vue.directive('focus',{
+        bind:function(el){
+            //绑定到元素上时 立即执行且只能执行一次
+            // el是被绑定的元素 且是原生JS的对象
+            //el.focus();
+            //刚绑定时，还未插入到DOM中，此时调用focus 没有用
+
+        },
+        inserted:function(el){
+            //元素插入到DOM元素中时 执行 触发一次
+            el.focus();   //即 获取焦点需要插入DOM中才能起作用
+        },
+        updated:function(){
+            //VNode更新时执行 可触发多次
+        }
+    });
+
+    //和JS行为有关的操作，最好在inserted 中执行， 与样式有关的操作一般再bind中
+    //自定义一个设置字体颜色的指令
+    Vue.directive('color',{
+        //样式只要通过指令绑定给元素，不管元素有没有被插入到页面中去，都会有内联样式
+        bind:function(el,binding){
+           // el.style.color='red';
+            el.style.color=binding.value;
+        }
+    });
+    var vm=new Vue({
+        el:"#app",
+        data:{
+            id:'',
+            name:'',
+            keywords:'',
+            list:[
+
+                {id:1,name:'奔驰',ctime:new Date()},
+                {id:2,name:'宝马',ctime:new Date()}
+
+            ]
+        },
+        methods:{
+            add(){
+                //Vue中更新数据后不用再将数据渲染到页面中，在使用Vue时数据已经实现了双向绑定
+                var car={id:this.id,name:this.name,ctime:new Date()}
+                this.list.push(car)
+                this.id=this.name=''
+            },
+            del(id){//根据id删除数据
+                /* some()根据实际情况判断 可随时终止
+               this.list.some((item,i)=>{
+                    if(item.id==id){
+                        this.list.splice(i,1);
+                        return true;//找到则 return
+                        //若return的是true则立即终止后续循环
+                    }
+                })*/
+
+                //点击删除后显示 该元素的索引值
+                var index=this.list.findIndex(item=>{
+                    if(item.id==id){
+                        return true;
+                    }
+                })
+               // console.log(index)
+                this.list.splice(index,1);
+            },
+            search(keywords){//根据关键字，进行数据的搜索
+
+               /* var newList=[]
+                this.list.forEach(item=>{
+                    if(item.name.indexOf(keywords) != -1){
+                        newList.push(item)
+                    }
+                })
+                return newList*/
+
+               return this.list.filter(item=>{
+                   //if(item.name.indexOf(keywords)!= -1)
+                   if(item.name.includes(keywords)){
+                       //includes('要包含的字符串') 若包含 返回true
+                       return item
+                   }
+               })
+            }
+        }
+
+    });
+    //document.getElementById("search").focus();
+    // 获取DOM元素 使搜索关键字的文本框获得焦点 Vue里面不这样使用
+
+</script>
+</body>
+</html>
+
+
+<!-- 过滤器调用时候的格式   {{ name | 过滤器的名称 }}-->

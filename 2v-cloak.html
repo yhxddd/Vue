@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>v-cloak、v-text、 v-html</title>
+    <script src="vue.js"></script>
+    <style>
+        [v-cloak]{
+        <!--属性给样式 -->
+            display:none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <p v-cloak>+++++{{ msg }}------</p>
+    <!-- 网速较慢的情况下页面会显示出 {{msg}}  此时需要使用v-cloak：解决插值表达式的闪烁问题-->
+    <!-- v-cloak 只会替换当前插值表达式占位符的位置 其余内容原样输出-->
+    <h4 v-text="msg">===========</h4>
+    <!-- v-text:也可以渲染数据显示到页面上 且没有闪烁问题
+                会覆盖元素中的文本内容 此时不显示======
+    -->
+</div>
+
+<div>{{ msg2 }}</div>
+<div v-text="mag2"></div><!-- 不会将<h1>解析为html格式--->
+<div v-html="msg2"></div>
+<script>
+    var vm=new Vue({
+        el:'#app',
+        data:{
+            msg:'hahahaha',
+            msg2:'<h1>我是一个h1</h1>'
+        }
+
+    })
+</script>
+</body>
+</html>

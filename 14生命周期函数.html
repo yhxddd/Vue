@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>生命周期函数</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <input type="button" value="修改msg" @click="msg='No'">
+    <h3 id="h3">{{msg}}</h3>
+</div>
+<script>
+
+    var vm=new Vue({
+        el:"#app",
+        data:{
+            msg:'ok'
+        },
+        methods:{
+            show(){
+                console.log("执行了show方法")
+            }
+        },
+        //创建阶段
+        beforeCreate(){
+            // 第一个生命周期函数，表时实例完全被创建出来之前，会执行它
+            //此时，data  和 methods中的数据都还未被初始化 此时调用会报错
+        },
+        created(){
+            console.log(this.msg);
+            this.show();
+            //created 第二个生命周期函数，data methods中的数据 被初始化可以进行调用了
+        },
+        beforeMount(){
+            //第三个生命周期函数 表时模板已经再内存中编译完成但是模板尚未被渲染到页面中去
+            console.log(document.getElementById("h3").innerText);
+            // 执行时页面中的元素还未被替换
+        },
+        mounted(){
+            //第四个生命周期函数，内存中的模板已经挂载到了页面中 用户可以看到渲染好的页面
+            console.log(document.getElementById("h3").innerText);
+            //是实例创建期间的最后一个生命周期函数，执行完mounted就表示实例已经完全被创建好了
+            //通过某些插件操作页面上的DOM节点，最早就再该函数中
+        },
+
+        //运行阶段
+        beforeUpdate(){
+
+            //会根据data数据的改变，有选择性的触发0次到多次
+            console.log('界面上元素的内容：'+document.getElementById("h3").innerText);
+            console.log('data中的msg数据是：'+this.msg);
+            // 表示界面还没被更新 数据被更新
+            //页面还是旧的
+        },
+        updated(){
+            //先根据data中最新的数据，在内存中重新渲染一份新的内存DOM树，
+            // 当DOM树被更新后， 把新的DOM树重新渲染到页面中去
+            console.log('界面上元素的内容：'+document.getElementById("h3").innerText);
+            console.log('data中的msg数据是：'+this.msg);
+        },
+
+        //销毁阶段
+        beforeDestroy(){
+            //实例进入销毁阶段，但此时，实例身上的data 和 methods 过滤器、指令等都害处于可用状态
+
+        },
+        destroy(){
+            //进入真正的销毁阶段 实例中所有数据等都处于不可用状态
+        }
+    })
+</script>
+</body>
+</html>

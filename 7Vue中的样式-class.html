@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Class样式</title>
+    <script src="vue.js"></script>
+    <style>
+        .red{
+            color:red;
+        }
+        .thin{
+            font-weight: 200;
+        }
+        .italic{
+            font-style:italic;
+        }
+        .active{
+            letter-spacing: 0.5em;  <!-- 字母间距 -->
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <!--<h1 class="red thin">这是一个很大的h1~~~~~</h1>-->
+
+
+    <h1 :class="['red','thin']">这是一个很大的h1</h1>
+    <!-- class使用v-bind绑定
+    将class当作属性时， 其中的类名需用[]包裹 直接传递一个数组--->
+
+    <!-- 在数组中使用三元表达式-->
+    <h1 :class="['thin','italic', flag?'active':'' ]">这是第二个很大的h1~~~</h1>
+
+    <!-- 在数组中使用对象 键值为类名 -->
+    <h1 :class="['thin','italic',{'active':flag}]">这是第二个很大的h1~~~</h1>
+
+    <!-- 直接使用对象 属性是类名，属性可带‘’ 也可不带-->
+    <h1 :class="{red:true,thin:true,italic:false,active:false}">这是第二个很大的h1~~~</h1>
+    <!-- 可以将上面的属性存在data中 直接引用data中的变量名 <h1 :class="classObj">这是第二个很大的h1~~~</h1>-->
+
+</div>
+<script>
+    var vm=new Vue({
+        el:'#app',
+        data:{
+            flag:true,//flag 为true 返回active 为false返回空
+            classObj: {red:true,thin:true,italic:false,active:false}
+        },
+        methods:{}
+    });
+</script>
+</body>
+</html>

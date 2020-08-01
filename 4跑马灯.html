@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>跑马灯案例</title>
+    <script src="vue.js"></script>
+
+</head>
+<body>
+<div id="app">
+    <input type="button" value="run"  @click="show">
+    <input type="button" value="stop" @click="stop">
+
+    <h4>{{msg}}</h4>
+</div>
+
+<script>
+    //在vm内部 想要调用数据 或方法 必须用过this. 来获取
+    var vm=new Vue({
+        el:'#app',
+        data:{
+            msg:'猥琐发育，别浪啊~！',
+            intervalId:null
+            //只要值为 null  则表明进行了点击
+        },
+        methods: {
+            //加定时器
+            show() {
+                //var _this=this;
+                //setInterval(function(){},400) 此时this指向需要重新定义
+
+                if(this.intervalId!=null)return;
+
+                this.intervalId=setInterval(() => {
+                   // console.log(this.msg);
+                    var start = this.msg.substring(0, 1);//截取第一个字符
+                    var end = this.msg.substring(1);///获取剩下的字符
+                    this.msg = end + start;//重新拼接字符串 将第一个放到最后一个位置
+                }, 400)
+            },
+            stop(){
+                clearInterval(this.intervalId);
+                this.intervalId=null;//清除计数器后 需要重新赋值为null
+            }
+        }
+
+
+    })
+</script>
+</body>
+</html>

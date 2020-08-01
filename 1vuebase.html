@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue基本代码</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+<!-- Vue 中的 V-->
+<div id="app"><!--vue实例会控制该区域-->
+   <!-- <p id="content"></p>  操作DOM 使用-->
+    <p>{{ msg }}</p> <!-- Vue 指令-->
+</div>
+
+<script>
+    //创建一个vue的实例 导入包之后 浏览器内存多了一个Vue构造函数
+    //new出来的实例 是  MVVM中的 VM
+    var vm=new Vue({
+        el: '#app',//表示当前new的实例要控制页面上的哪个区域
+        //data:MVVM 中的 M
+        data:{
+            //存放的是 el 中要使用的数据
+            msg:'欢迎学习Vue'//可以通过Vue的指令将数据渲染到界面上，不用操作DOM
+
+        }
+    });
+
+
+    //$('#content').text(data.msg);//操作DOM 将msg中内容渲染到p标签中
+
+</script>
+</body>
+</html>

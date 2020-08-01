@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>路由的基本使用</title>
+    <script src="vue.js"></script>
+    <script src="vue-router.js"></script>
+    <style>
+        .router-link-active{
+            /*默认的名称    点击之后的超链接样式*/
+            color:red;
+            font-weight: 400;
+            font-style:italic;
+            font-size: 30px;
+            text-decoration: underline;
+        }
+        .myactive{
+            /* 在路由对象中指定的 名称*/
+            color:red;
+            font-weight: 400;
+            font-style:italic;
+            font-size: 30px;
+        }
+        .v-enter,.v-leave-to{
+            opacity:0;
+            transform:translateX(140px);
+        }
+        .v-enter-active,.v-leave-active{
+            transition: all 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <!-- 路由是基于hash（#号）的，在<a>标签中不能直接写 /login 需加上 #-->
+    <!--
+        <a href="#/login">登录</a>
+        <a href="#/register">注册</a>
+     -->
+
+        <!-- router-link 默认渲染为一个a标签-->
+    <router-link to="/login">登录</router-link>
+    <router-link to="/register">注册</router-link>
+
+    <transition mode="out-in">
+        <router-view></router-view>
+    </transition>
+    <!-- 用作占位符 将来 路由规则匹配到的组件会展示到router-view中去-->
+</div>
+
+<script>
+    var login = {
+        template:'<h1>登录组件</h1>'
+    };
+    var register={
+        template: '<h1>注册组件</h1>'
+    };
+
+    //创建路由对象  当导入vue-router 包之后，在window全局对象中，就有了路由构造函数
+    //  构造函数：VueRouter
+    //在new 路由对象的时候，可以为构造函数传递一个配置对象
+
+    var routerObj = new VueRouter({
+        //route     //配置对象中的route 表示路由匹配规则
+        routes:[   //路由匹配规则
+            //每个路由规则 都是一个对象，这个规则对象身上必须有两个属性：
+            //path： 表示监听哪个路由链接地址
+            //component 表示如果路由是前面匹配到的path 则展示component属性对应的组件
+            //component 属性值必须是 组件模板对象 不能是 组件名称
+
+            {path:'/',redirect:'/login'}, //重定向 强制默认展示某个组件/页面
+            {path:'/login',component:login},
+            {path:'/register',component: register}
+        ],
+        linkActiveClass: 'myactive'   //自己指定点击超链接的样式名称
+    });
+
+    var vm = new Vue({
+        el:'#app',
+        data:{},
+        methods:{},
+        router:routerObj
+        //将路由规则对象注册到vm实例上用于监听URL地址变化，展示对应的组件
+
+
+    //路由匹配:
+        //点击页面上的超链接， URL地址改变 触发路由的监听事件  匹配路由规则 展示对应组件
+    })
+</script>
+</body>
+</html>

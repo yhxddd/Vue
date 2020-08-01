@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>组件创建的三种方法以及私有组件的创建</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+
+<div id="app">
+    <!-- 如果要使用组件 直接把组件的名称 以HTML标签的形式进行引用-->
+    <my-com1></my-com1>
+    <mycom2></mycom2>
+    <mycom3></mycom3>
+    <login></login>
+</div>
+
+<template id="tmp1">
+    <div>
+        <h3>这是通过template元素，在外部定义的组件结构（第三种方法）</h3>
+    </div>
+</template>
+<script>
+    //创建方式1：
+        //1.1 使用Vue.extend创建全局的Vue组件
+    var com1 = Vue.extend({
+        template:'<h3>这是使用Vue.extend创建的组件</h3>'
+        //指定 组件要展示的HTML结构以及内容
+    });
+        //1.2 使用Vue.component('组件的名称', 创建出来的组件模板对象)
+    Vue.component('myCom1',com1);
+    //创建时使用驼峰命名时   调用时需把大写改为小写 再用 - 隔开
+    //不适用驼峰时，直接名称引用不用 - 隔开
+
+    //或：
+    Vue.component('myCom1', Vue.extend({
+        template:'<h3>这是使用Vue.extend创建的组件</h3>'
+        }));
+
+
+    //创建方式2：
+    //直接使用对象创建
+    Vue.component('mycom2', {
+        //无论是哪种方式创建出来的组件，组件的template属性指向模板内容，必须有且只有一个根元素
+        //想将 <h3> 和<span> 均显示出来 则需用<div>将其包裹起来
+        template: '<div><h3>这是使用Vue.component创建的组件</h3><span>123</span></div>'
+    });
+
+
+    //创建方式3：
+    //用id创建tmp1 ，且该id 必须在#app 的div的外边
+    Vue.component('mycom3',{
+        template: '#tmp1'
+    });
+
+
+    var vm=new Vue({
+        el:'#app',
+        data:{},
+        methods:{},
+        components:{
+            //定义私有组件
+            login:{
+                //login 是组件名
+                template:'<h3>这是私有的login组件</h3>'
+                //私有的组件定义完之后在 特定的控制div中 用标签形式引用 如果在其他地方引用会报错
+            }
+        }
+    })
+</script>
+</body>
+</html>

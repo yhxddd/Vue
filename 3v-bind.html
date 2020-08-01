@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>v-bind、v-on</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <!-- v-bind 是Vue中提供的用于绑定属性的指令-->
+    <input type="button" value="按钮" v-bind:title="mytitle +'heihei' ">
+    <!-- v-bind 可以被简写为 ： -->
+    <!-- v-bind 后可以写合法的JS表达式-->
+    <input type="button" value="按钮2" :title="mytitle +'11heihei' ">
+
+    <!-- v-on 用于绑定事件  缩写 @-->
+    <!-- <input type="button" value="按钮3" v-on:click="alert('xixi')">
+         此时会报错 因为会将alert当作变量来使用-->
+    <input type="button" value="按钮3" v-on:click="show">
+    <!-- show 为放方法 定义在methods中  click为事件类型 可以替换-->
+
+</div>
+
+<script>
+    var vm=new Vue({
+        el:'#app',
+        data:{
+            mytitle:'这是我自己定义的title'
+        },
+        methods:{//定义当前页面的所有方法
+            show:function(){
+                alert('heihei');
+            }
+
+        }
+    })
+</script>
+</body>
+</html>

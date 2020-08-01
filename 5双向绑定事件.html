@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>双向绑定事件</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+<input type="text" v-bind:value="msg" style="width:100%;">
+<!-- v-bind绑定的属性 ：改变M中的数据 会映射到页面中去  但页面中数据修改 不会映射到M中 所以bind是单项绑定-->
+<input type="text" style="width:100%;" v-model="msg">
+<!-- v-model 只能运用在表单元素   可以实现双向数据绑定 修改任意一个可同步到另外一个上面-->
+<script>
+    var vm=new Vue({
+        el:'#app',
+        data:{
+            msg:'你是一个憨批 略略略'
+        },
+        methods:{}
+    })
+</script>
+</body>
+</html>

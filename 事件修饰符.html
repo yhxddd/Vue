@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>事件修饰符</title>
+    <script src="vue.js"></script>
+    <style>
+        .inner{
+            height: 150px;
+            background-color: aqua;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <div class="inner" @click="div1Handler">
+        <input type="button" value="点他" @click.stop="btnHandler">
+        <!-- .stop 阻止冒泡 加上后 点击只触发btn事件-->
+        <!-- .capture 捕获触发方式  即先触发外层再触发内层 再外层的标签中加-->
+        <!-- .self 只有自己本身才能触发  即不会被动触发-->
+
+    </div>
+    <a href="http://baidu.com" @click.prevent="linkClick">连接到百度</a>
+    <!-- .prevent  阻止默认事件 即 不跳转--->
+    <!-- .once 事件只触发一次-->
+
+
+</div>
+
+<script>
+    var vm=new Vue({
+        el:'#app',
+        data:{
+
+        },
+        methods:{
+            div1Handler(){
+                console.log("这是触发了inner div的点击事件");
+            },
+            btnHandler(){
+                console.log("触发了btn的点击事件");
+                //点击button时 先触发btn 再触发div  遵循冒泡原则
+            },
+            linkClick(){
+                console.log("触发链接的点击事件");
+            }
+        }
+    })
+</script>
+</body>
+</html>

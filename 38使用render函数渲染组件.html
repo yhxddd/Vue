@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>render方法渲染组件</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+
+<div id="app">
+   <!-- <login></login>-->
+</div>
+<script>
+    var login = {
+        template:'<h1>这是登录组件</h1>'
+
+    };
+    var vm=new Vue({
+        el:'#app',
+        data:{},
+        methods:{},
+        /*普通方法渲染组件:
+        components:{
+            login
+        }*/
+        //render 方法：
+        render:function(createElements){
+            //createElements  是一个方法 调用它把指定的组件模板渲染为html结构
+            return createElements(login)
+
+            //return 的结果会 替换 页面中el指定的容器  会清空id=app的div
+        }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>v-if v-show的使用</title>
+    <script src="vue.js"></script>
+    <!-- v-if具有更高的切换消耗  v-show具有更高的初始渲染消耗-->
+</head>
+<body>
+<div id="app">
+    <input type="button" value="切换" @click="toggle">
+    <!-- v-if的特点是每次都会重新删除或创建元素-->
+    <!-- v-show:每次都不不会重新进行DOM的删除和创建操作，只是切换了元素的display:none-->
+
+    <h3 v-if="flag">这是用v-if控制的元素</h3>
+    <h3 v-show="flag">这是用v-show控制的元素</h3>
+</div>
+
+<script>
+    var vm=new Vue({
+        el:'#app',
+        data:{
+            flag:true
+        },
+        methods:{
+            toggle(){
+                this.flag=!this.flag
+            }
+        }
+    })
+</script>
+</body>
+</html>
